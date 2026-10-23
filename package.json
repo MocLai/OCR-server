@@ -1,0 +1,29 @@
+{
+  "name": "ocr-server",
+  "version": "1.0.0",
+  "description": "OCR Server with Swagger UI and Electron packaging",
+  "main": "index.js",
+  "author": "MOCLAI",
+  "scripts": {
+    "start": "electron .",
+    "dev": "node index.js",
+    "build:exe": "electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.ocr.server",
+    "win": {
+      "target": "portable"
+    }
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "tesseract.js": "^5.1.0"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}
