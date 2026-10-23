@@ -1,84 +1,84 @@
 # 🚀 OCR Server
 
-> Server nhận diện ký tự quang học (OCR) từ hình ảnh Base64 xây dựng trên nền tảng **Express** và **Tesseract.js**, tích hợp sẵn **Swagger UI** để kiểm thử trực quan và hỗ trợ đóng gói thành ứng dụng **Windows Portable (.exe)** chạy ngầm trên khay hệ thống.
+> A lightweight, robust Optical Character Recognition (OCR) server built with **Express** and **Tesseract.js**. Features built-in **Swagger UI** for interactive API testing and supports packaging as a headless **Windows Portable (.exe)** application with System Tray integration.
 
 ---
 
-## ✨ Tính năng nổi bật
+## ✨ Features
 
-* **Nhận diện ký tự nhanh chóng:** Sử dụng engine OCR mạnh mẽ từ [Tesseract.js](https://tesseract.projectnaptha.com/).
-* **Hỗ trợ Base64 linh hoạt:** Tự động nhận diện cả ảnh có tiền tố (`data:image/png;base64,...`) và chuỗi Base64 thuần túy (raw base64). Tự động lọc khoảng trắng và ký tự xuống dòng thừa.
-* **Bộ lọc ký tự đa dạng:**
-  * `NUMBER_ONLY`: Chỉ nhận diện chữ số (`0-9`).
-  * `ALPHA_ONLY`: Chỉ nhận diện chữ cái (`a-z`, `A-Z`).
-  * `ALPHANUMERIC`: Nhận diện cả chữ và số (mặc định).
-* **Giao diện Swagger UI trực quan:** Dễ dàng kiểm thử API trực tiếp tại `http://localhost:1510/api-docs`.
-* **Chạy ngầm khay hệ thống (System Tray):** Khi đóng gói thành file `.exe`, ứng dụng chạy ngầm 100% không bật cửa sổ giao diện, hiển thị icon tại khay hệ thống cạnh đồng hồ Windows để tiện theo dõi và mở Swagger.
-
----
-
-## 🛠️ Yêu cầu môi trường
-
-* [Node.js](https://nodejs.org/) version 18 trở lên (nếu chạy từ mã nguồn).
-* Hệ điều hành: Windows, macOS hoặc Linux.
+* **Fast & Accurate OCR:** Powered by [Tesseract.js](https://tesseract.projectnaptha.com/) engine.
+* **Flexible Base64 Input:** Automatically handles data URI headers (e.g., `data:image/png;base64,...`) as well as raw base64 strings. Automatically cleans whitespaces and trailing newline characters.
+* **Character Whitelist Filters:**
+  * `NUMBER_ONLY`: Extracts digits only (`0-9`).
+  * `ALPHA_ONLY`: Extracts alphabetic characters only (`a-z`, `A-Z`).
+  * `ALPHANUMERIC`: Extracts both letters and digits (default).
+* **Interactive Swagger UI:** Built-in OpenAPI documentation available at `http://localhost:1510/api-docs`.
+* **Headless Background Mode:** Packaged as an Electron `.exe` that runs 100% in the background without intrusive popup windows. Easily controlled via the Windows System Tray icon.
 
 ---
 
-## 📦 Cài đặt
+## 🛠️ Prerequisites
 
-1. Clone mã nguồn về máy:
+* [Node.js](https://nodejs.org/) (v18 or higher)
+* Operating System: Windows, macOS, or Linux (Windows required for building `.exe`)
+
+---
+
+## 📦 Installation
+
+1. Clone the repository:
    ```bash
    git clone https://github.com/MocLai/OCR-server.git
    cd OCR-server
    ```
 
-2. Cài đặt các gói phụ thuộc:
+2. Install dependencies:
    ```bash
    npm install
    ```
 
 ---
 
-## 🚦 Hướng dẫn sử dụng
+## 🚦 Getting Started
 
-### 1. Khởi chạy bằng Node.js (Chế độ Console Server)
+### 1. Run as a Console Server (Node.js)
 ```bash
 npm run dev
-# hoặc
+# or
 node index.js
 ```
-Server sẽ lắng nghe tại cổng `1510`:
+The server will start listening on port `1510`:
 * **API Endpoint:** `http://localhost:1510/api/extract`
-* **Swagger UI:** `http://localhost:1510/api-docs` (hoặc truy cập thẳng `http://localhost:1510`)
+* **Swagger UI:** `http://localhost:1510/api-docs` (or directly `http://localhost:1510`)
 
-### 2. Khởi chạy bằng Electron (Môi trường Dev Desktop)
+### 2. Run with Electron (Development Desktop Mode)
 ```bash
 npm start
 ```
-Ứng dụng sẽ chạy ngầm và tạo một biểu tượng ở khay hệ thống (System Tray).
+Starts the server silently in the background and places an icon in the Windows System Tray.
 
-### 3. Đóng gói thành file `.exe` (Windows Portable)
+### 3. Build Windows Portable (.exe)
 ```bash
 npm run build:exe
 ```
-Sau khi build xong, file chạy độc lập sẽ nằm trong thư mục `dist/`:
+The standalone executable will be generated inside the `dist/` directory:
 ```text
 dist/ocr-server 1.0.0.exe
 ```
-> Bạn có thể copy file `.exe` này sang bất kỳ máy tính Windows nào khác để chạy ngay mà **không cần cài đặt Node.js hay bất cứ công cụ nào**.
+> **Note:** The portable `.exe` file can be transferred to any Windows machine and executed **without needing Node.js or any prerequisites installed**.
 
 ---
 
-## 📖 Tài liệu API
+## 📖 API Documentation
 
 ### 📌 `POST /api/extract`
-Trích xuất văn bản từ hình ảnh Base64.
+Extracts text from a base64-encoded image.
 
 #### Request Body (`application/json`):
-| Tham số | Kiểu dữ liệu | Bắt buộc | Mặc định | Mô tả |
+| Parameter | Type | Required | Default | Description |
 | :--- | :--- | :---: | :---: | :--- |
-| `base64` | `string` | **Có** | — | Chuỗi Base64 của ảnh (có hoặc không có header `data:image/...;base64,`) |
-| `type` | `string` | Không | `ALPHANUMERIC` | Bộ lọc ký tự: `NUMBER_ONLY`, `ALPHA_ONLY`, `ALPHANUMERIC` |
+| `base64` | `string` | **Yes** | — | Base64-encoded image string (with or without `data:image/...;base64,` prefix) |
+| `type` | `string` | No | `ALPHANUMERIC` | Character whitelist filter: `NUMBER_ONLY`, `ALPHA_ONLY`, or `ALPHANUMERIC` |
 
 #### Request Example:
 ```json
@@ -88,7 +88,7 @@ Trích xuất văn bản từ hình ảnh Base64.
 }
 ```
 
-#### Response Example (Thành công - `200 OK`):
+#### Success Response (`200 OK`):
 ```json
 {
   "success": true,
@@ -97,7 +97,7 @@ Trích xuất văn bản từ hình ảnh Base64.
 }
 ```
 
-#### Response Example (Lỗi - `400 Bad Request`):
+#### Error Response (`400 Bad Request`):
 ```json
 {
   "error": "Thiếu dữ liệu base64"
@@ -106,9 +106,9 @@ Trích xuất văn bản từ hình ảnh Base64.
 
 ---
 
-## 💻 Ví dụ gọi API
+## 💻 Code Examples
 
-### Sử dụng cURL:
+### cURL
 ```bash
 curl -X POST http://localhost:1510/api/extract \
   -H "Content-Type: application/json" \
@@ -118,7 +118,7 @@ curl -X POST http://localhost:1510/api/extract \
   }'
 ```
 
-### Sử dụng JavaScript (`fetch`):
+### JavaScript (`fetch`)
 ```javascript
 const response = await fetch('http://localhost:1510/api/extract', {
   method: 'POST',
@@ -132,10 +132,10 @@ const response = await fetch('http://localhost:1510/api/extract', {
 });
 
 const data = await response.json();
-console.log('Văn bản nhận diện được:', data.text);
+console.log('Extracted text:', data.text);
 ```
 
-### Sử dụng Python (`requests`):
+### Python (`requests`)
 ```python
 import requests
 
@@ -146,10 +146,10 @@ payload = {
 }
 
 res = requests.post(url, json=payload)
-print("Kết quả:", res.json().get("text"))
+print("Extracted text:", res.json().get("text"))
 ```
 
 ---
 
 ## 📄 License
-Dự án được phân phối dưới giấy phép [ISC](LICENSE).
+This project is licensed under the [ISC License](LICENSE).
